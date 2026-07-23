@@ -6,11 +6,14 @@ import shutil
 import asyncio
 import random
 import numpy as np
+from pathlib import Path
 
 app = FastAPI(title="Digital Twin Vision Inspector")
 
 
-MODEL_PATH = r'C:\ScrewProject\weights\best.pt'
+BASE_DIR = Path(__file__).resolve().parent
+MODEL_PATH = BASE_DIR / "weights" / "best.pt"
+
 try:
     model = YOLO(str(MODEL_PATH))
 except Exception as e:
