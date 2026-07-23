@@ -169,7 +169,8 @@ footer{
     const defectsEl = document.getElementById("defects-count");
     const statusEl = document.getElementById("machine-status");
 
-    const socket = new WebSocket("ws://localhost:8000/ws");
+    const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const socket = new WebSocket(`${wsProtocol}//${window.location.host}/ws`);
 
     socket.onmessage = function(event) {
         const data = JSON.parse(event.data);
