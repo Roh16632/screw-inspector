@@ -7,6 +7,8 @@ import asyncio
 import random
 import numpy as np
 from pathlib import Path
+import os
+os.environ["OMP_NUM_THREADS"] = "1"
 
 app = FastAPI(title="Digital Twin Vision Inspector")
 
@@ -49,10 +51,11 @@ def get_alerts():
 
 
 @app.post("/detect-frame")
-async def detect_frame(file: UploadFile = File(...)):
-    contents = await file.read()
+def detect_frame(file: UploadFile = File(...)):
+    contents = file.file.read()
     np_arr = np.frombuffer(contents, np.uint8)
     frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+    frame = cv2.resize(frame, (416, 416))
 
     results = model(frame, conf=0.4)
     detections = []
